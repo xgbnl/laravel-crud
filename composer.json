@@ -1,6 +1,6 @@
 {
     "name": "xgbnl/business-helper",
-    "description": "👏🎉🎁基于Laravel开发一套业务分层，开箱即用",
+    "description": "\uD83D\uDE80非常简单的CRUD工具，业务分层模式使开发更简单",
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -10,7 +10,7 @@
     },
     "authors": [
         {
-            "name": "xgbnl",
+            "name": "df",
             "email": "745502274@qq.com"
         }
     ],
@@ -24,7 +24,7 @@
                 "Xgbnl\\Business\\Providers\\BusinessServiceProvider"
             ],
             "aliases": {
-                "business": "BusinessFacade"
+                "business": "Xgbnl\\Business\\Facades\\BusinessFacade"
             }
         }
     }
