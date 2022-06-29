@@ -11,7 +11,7 @@ class InstallCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'business:install';
+    protected $signature = 'business:publish';
 
     /**
      * The console command description.
