@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Xgbnl\Business\Contacts\Observer;
+
+class DummyClass implements Observer
+{
+    public function created(Model $model): void
+    {
+
+    }
+
+    public function updated(Model $model): void
+    {
+
+    }
+
+    public function deleted(Model $model): void
+    {
+
+    }
+}

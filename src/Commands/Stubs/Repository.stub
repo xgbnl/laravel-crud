@@ -1,0 +1,16 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Xgbnl\Business\Business\Repository;
+use Illuminate\Database\Eloquent\Model;
+
+class DummyClass extends Repository
+{
+    protected function doTransformer(Model $model): array
+    {
+      // TODO: Implement doTransformer() method.
+    }
+}

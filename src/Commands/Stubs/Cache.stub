@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Xgbnl\Business\Business\RepositoryCache;
+
+class DummyClass extends RepositoryCache
+{
+    protected function configure(): void
+    {
+      // TODO: Implement configure() method.
+    }
+}

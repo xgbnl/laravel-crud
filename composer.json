@@ -1,0 +1,31 @@
+{
+    "name": "xgbnl/business-helper",
+    "description": "👏🎉🎁基于Laravel开发一套业务分层，开箱即用",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Xgbnl\\Business\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "xgbnl",
+            "email": "745502274@qq.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "ext-redis": "*"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Xgbnl\\Business\\Providers\\BusinessServiceProvider"
+            ],
+            "aliases": {
+                "business": "BusinessFacade"
+            }
+        }
+    }
+}

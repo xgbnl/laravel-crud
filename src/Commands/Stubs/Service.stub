@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+namespace DummyNamespace;
+
+use Xgbnl\Business\Business\Service;
+
+class DummyClass extends Service
+{
+   protected function registerObserver(): void
+   {
+     // TODO: Implement registerObserver() method.
+   }
+}
