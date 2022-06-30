@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace DummyNamespace;
 
-use Xgbnl\Business\Business\RepositoryCache;
+use Xgbnl\Business\Cache\Cacheable;
 
-class DummyClass extends RepositoryCache
+class DummyClass extends Cacheable
 {
     protected function configure(): void
     {

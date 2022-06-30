@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace DummyNamespace;
 
-use Xgbnl\Business\Business\Repositories\Repositories;
 use Illuminate\Database\Eloquent\Model;
+use Xgbnl\Business\Business\Repositories\Repositories;
 
 class DummyClass extends Repositories
 {

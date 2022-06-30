@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace DummyNamespace;
 
 use Xgbnl\Business\Contacts\Observer;
+use Illuminate\Database\Eloquent\Model;
 
 class DummyClass implements Observer
 {
