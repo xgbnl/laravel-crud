@@ -73,7 +73,7 @@ abstract class Cacheable
      */
     final public function forget(): void
     {
-        if (empty($this->cacheFields) && $this->redis->exists($this->cacheFields)) {
+        if (!empty($this->cacheFields) && $this->redis->exists($this->cacheFields)) {
             $this->redis->del($this->cacheFields);
         }
     }
