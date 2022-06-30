@@ -59,7 +59,7 @@ trait BusinessHelpers
             $msg = match (true) {
                 str_ends_with($class, 'Request')    => '验证器',
                 str_ends_with($class, 'Service')    => '服务层',
-                str_ends_with($class, 'Repositories') => '仓库层',
+                str_ends_with($class, 'Repository') => '仓库层',
             };
 
             Fail::throwFailException($msg . '模型[ ' . $class . '] 不存在');
