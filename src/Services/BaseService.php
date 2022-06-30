@@ -112,4 +112,9 @@ abstract class BaseService extends Observable
         $this->notify();
         return true;
     }
+
+    public function registerObserver(): void
+    {
+        $this->observer = null;
+    }
 }
