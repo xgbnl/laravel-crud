@@ -16,10 +16,10 @@ abstract class Observable
 
     final public function __construct()
     {
-        $this->configure();
+        $this->registerObserver();
     }
 
-    abstract protected function configure(): void;
+    abstract protected function registerObserver(): void;
 
     protected function notify(): void
     {
@@ -28,7 +28,7 @@ abstract class Observable
         }
     }
 
-    protected function registerObserver(string $observer): void
+    protected function observer(string $observer): void
     {
         if (!is_subclass_of($observer, Observer::class)) {
             Fail::throwFailException('模型( ' . $observer . ' )错误，必须实现接口:[ ' . Observer::class . ' ]');
