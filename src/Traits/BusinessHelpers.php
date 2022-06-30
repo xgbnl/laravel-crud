@@ -3,12 +3,18 @@
 namespace Xgbnl\Business\Traits;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Xgbnl\Business\Cache\Cacheable;
 use Xgbnl\Business\Enum\GeneratorEnum;
 use Xgbnl\Business\Repositories\Repositories;
 use Xgbnl\Business\Services\BaseService;
 use Xgbnl\Business\Utils\Fail;
 use Xgbnl\Business\Utils\Helper;
 
+/**
+ * @property Repositories $repository
+ * @property BaseService $service
+ * @property Cacheable $cache
+ */
 trait BusinessHelpers
 {
     private ?string $businessModel = null;
@@ -18,16 +24,18 @@ trait BusinessHelpers
         return match ($name) {
             GeneratorEnum::REPOSITORY => $this->makeBusinessModel(GeneratorEnum::REPOSITORY),
             GeneratorEnum::SERVICE    => $this->makeBusinessModel(GeneratorEnum::SERVICE),
+            GeneratorEnum::CACHE      => $this->makeBusinessModel(GeneratorEnum::CACHE, ['repositories' => $this->repository]),
         };
     }
 
-    private function makeBusinessModel(string $business): BaseService|Repositories
+    private function makeBusinessModel(string $business, array $params = []): BaseService|Repositories|Cacheable
     {
         $class = $this->checkBusiness($business);
 
         $parentClass = match ($business) {
             GeneratorEnum::REPOSITORY => Repositories::class,
             GeneratorEnum::SERVICE    => BaseService::class,
+            GeneratorEnum::CACHE      => Cacheable::class,
         };
 
         if (!is_subclass_of($class, $parentClass)) {
@@ -35,7 +43,7 @@ trait BusinessHelpers
         }
 
         try {
-            return app($class);
+            return !empty($params) ? app($class, $params) : app($class);
         } catch (\Exception $e) {
             Fail::throwFailException(message: '实例化业务模型出错:[ ' . $e->getMessage() . ' ]');
         }
@@ -57,9 +65,10 @@ trait BusinessHelpers
         if (!class_exists($class)) {
 
             $msg = match (true) {
-                str_ends_with($class, 'Request')    => '验证器',
-                str_ends_with($class, 'Service')    => '服务层',
-                str_ends_with($class, 'Repository') => '仓库层',
+                str_ends_with($class, 'Request')    => '验证',
+                str_ends_with($class, 'Service')    => '服务',
+                str_ends_with($class, 'Repository') => '仓库',
+                str_ends_with($class, 'Cache')      => '缓存'
             };
 
             Fail::throwFailException($msg . '模型[ ' . $class . '] 不存在');

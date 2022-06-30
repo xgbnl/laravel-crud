@@ -9,4 +9,6 @@ enum GeneratorEnum
     public const SERVICE = 'service';
 
     public const REPOSITORY = 'repository';
+
+    public const CACHE = 'cache';
 }
