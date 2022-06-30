@@ -3,9 +3,9 @@
 namespace Xgbnl\Business\Traits;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Xgbnl\Business\Service\Service;
+use Xgbnl\Business\Services\BaseService;
 use Xgbnl\Business\Enum\GeneratorEnum;
-use Xgbnl\Business\Repository\Repository;
+use Xgbnl\Business\Repositories\Repositories;
 use Xgbnl\Business\Fail;
 
 trait BusinessHelpers
@@ -20,13 +20,13 @@ trait BusinessHelpers
         };
     }
 
-    private function makeBusinessModel(string $business): Service|Repository
+    private function makeBusinessModel(string $business): BaseService|Repositories
     {
         $class = $this->checkBusiness($business);
 
         $parentClass = match ($business) {
-            GeneratorEnum::REPOSITORY => Repository::class,
-            GeneratorEnum::SERVICE    => Service::class,
+            GeneratorEnum::REPOSITORY => Repositories::class,
+            GeneratorEnum::SERVICE    => BaseService::class,
         };
 
         if (!is_subclass_of($class, $parentClass)) {
@@ -58,7 +58,7 @@ trait BusinessHelpers
             $msg = match (true) {
                 str_ends_with($class, 'Request')    => '验证器',
                 str_ends_with($class, 'Service')    => '服务层',
-                str_ends_with($class, 'Repository') => '仓库层',
+                str_ends_with($class, 'Repositories') => '仓库层',
             };
 
             Fail::throwFailException($msg . '模型[ ' . $class . '] 不存在');
@@ -81,7 +81,7 @@ trait BusinessHelpers
 
         $class = array_pop($parts);
 
-        $class = Repository::strEndWith($class, 'Controller');
+        $class = Repositories::strEndWith($class, 'Controller');
 
         $clazz = $ns . $class;
 

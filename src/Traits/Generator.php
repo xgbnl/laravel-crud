@@ -7,7 +7,7 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
-use Xgbnl\Business\Cache\Cache;
+use Xgbnl\Business\Cache\Cacheable;
 use Xgbnl\Business\Enum\GeneratorEnum;
 use Xgbnl\Business\Fail;
 
@@ -50,7 +50,7 @@ trait Generator
         return $this->model = $clazz;
     }
 
-    private function makeModel(string $parentClass = Model::class, string $callMethod = 'getModel', bool $instance = true, array $parameters = []): Cache|Model|string
+    private function makeModel(string $parentClass = Model::class, string $callMethod = 'getModel', bool $instance = true, array $parameters = []): Cacheable|Model|string
     {
         if (!method_exists($this, $callMethod)) {
             Fail::throwFailException(message: '调用的方法[ ' . $callMethod . ' ]不存在');
@@ -60,7 +60,7 @@ trait Generator
 
         $modelType = match (true) {
             str_ends_with($parentClass, 'Model') => '模型',
-            str_ends_with($parentClass, 'Cache') => '仓库缓存',
+            str_ends_with($parentClass, 'Cacheable') => '仓库缓存',
         };
 
         if (!is_subclass_of($class, $parentClass)) {

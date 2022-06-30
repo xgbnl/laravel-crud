@@ -4,13 +4,13 @@ namespace Xgbnl\Business\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Xgbnl\Business\Service\Service;
-use Xgbnl\Business\Repository\Repository;
+use Xgbnl\Business\Services\BaseService;
+use Xgbnl\Business\Repositories\Repositories;
 use Xgbnl\Business\Traits\BusinessHelpers;
 
 /**
- * @property Repository $repository
- * @property Service $service
+ * @property Repositories $repository
+ * @property BaseService $service
  */
 abstract class AbstractController extends Controller
 {

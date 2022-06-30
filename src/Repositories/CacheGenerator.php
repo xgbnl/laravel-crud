@@ -1,32 +1,32 @@
 <?php
 
-namespace Xgbnl\Business\Repository;
+namespace Xgbnl\Business\Repositories;
 
 use Illuminate\Contracts\Database\Query\Builder as QueryBuilder;
 use Illuminate\Support\Facades\DB;
-use Xgbnl\Business\Cache\Cache;
+use Xgbnl\Business\Cache\Cacheable;
 use Xgbnl\Business\Contacts\Magic;
 use Xgbnl\Business\Enum\GeneratorEnum;
 use Xgbnl\Business\Fail;
 use Xgbnl\Business\Traits\Generator;
 
 /**
- * @property-read Cache|null $cache
+ * @property-read Cacheable|null $cache
  * @property-read QueryBuilder $rawQuery
  */
-abstract class BaseRepository implements Magic
+abstract class CacheGenerator implements Magic
 {
     use Generator;
 
     private ?string $cacheModel = null;
 
-    public function magicGet(string $propertyName): Cache
+    public function magicGet(string $propertyName): Cacheable
     {
         return match ($propertyName) {
             'cache'    => $this->makeModel(
-                parentClass: Cache::class,
+                parentClass: Cacheable::class,
                 callMethod : 'getCacheModel',
-                parameters : ['repository' => $this],
+                parameters : ['repositories' => $this],
             ),
             'rawQuery' => $this->table
                 ? DB::table($this->table)
@@ -49,7 +49,7 @@ abstract class BaseRepository implements Magic
 
         $class = $this->strEndWith($class, GeneratorEnum::REPOSITORY);
 
-        $class = $ns . $class . 'Cache';
+        $class = $ns . $class . 'Cacheable';
 
         $this->resolveClassFail($class, '缺少仓库缓存模型 [ ' . $class . ' ]');
 

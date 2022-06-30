@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Xgbnl\Business\Repository;
+namespace Xgbnl\Business\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-abstract class Repository extends BaseRepository
+abstract class Repositories extends CacheGenerator
 {
     // Store models
     private array $models = [];

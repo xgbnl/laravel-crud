@@ -5,22 +5,22 @@ namespace Xgbnl\Business\Cache;
 use Redis;
 use RedisException;
 use Xgbnl\Business\Fail;
-use Xgbnl\Business\Repository\Repository;
+use Xgbnl\Business\Repositories\Repositories;
 
-abstract class Cache
+abstract class Cacheable
 {
-    protected ?Repository $repository = null;
+    protected ?Repositories $repositories = null;
 
     protected ?Redis $redis = null;
 
     protected array $caches = [];
 
-    // Cache Fields
+    // Cacheable Fields
     protected array $cacheFields = [];
 
-    final public function __construct(Repository $repository = null)
+    final public function __construct(Repositories $repository = null)
     {
-        $this->repository = $repository;
+        $this->repositories = $repository;
 
         $this->connectRedis(env('REPOSITORY_CACHE', 'default'));
     }
@@ -42,25 +42,28 @@ abstract class Cache
     final public function fetchByKey(string $key): array
     {
         if (!$this->redis->exists($key)) {
-            try {
-                $this->configure();
+            $this->store($key);
 
-                if (empty($this->caches)) {
-                    return [];
-                }
-
-                $this->redis->set($key, json_encode($this->caches, JSON_UNESCAPED_UNICODE));
-
-                return $this->caches;
-            } catch (RedisException $e) {
-                Fail::throwFailException(message: '数据写入redis时出错: [ ' . $e->getMessage() . ' ]', throwable: $e);
-            }
+            return $this->caches;
         }
 
         try {
             return json_decode($this->redis->get($key), true);
         } catch (RedisException $e) {
             Fail::throwFailException(message: '从redis中获取缓存出错: [ ' . $e->getMessage() . ' ]', throwable: $e);
+        }
+    }
+
+    private function store(string $key): void
+    {
+        try {
+            $this->configure();
+
+            if (!empty($this->caches)) {
+                $this->redis->set($key, json_encode($this->caches, JSON_UNESCAPED_UNICODE));
+            }
+        } catch (RedisException $e) {
+            Fail::throwFailException(message: '数据写入redis时出错: [ ' . $e->getMessage() . ' ]', throwable: $e);
         }
     }
 

@@ -18,7 +18,7 @@ class MakeCacheCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $description = 'Create a new Repository Cache';
+    protected $description = 'Create a new Repositories Cacheable';
 
     protected $type = 'Cache';
 

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Xgbnl\Business\Service;
+namespace Xgbnl\Business\Services;
 
 use Exception;
 use Throwable;
@@ -11,20 +11,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Xgbnl\Business\Contacts\Observer;
 use Xgbnl\Business\Fail;
 use Xgbnl\Business\Traits\Generator;
 
-abstract class Service
+abstract class BaseService extends Observable
 {
     use Generator;
-
-    protected ?Observer $observer = null;
-
-    final public function __construct()
-    {
-        $this->registerObserver();
-    }
 
     /**
      * 创建模型或更新模型
@@ -42,13 +34,15 @@ abstract class Service
             try {
                 DB::beginTransaction();
 
-                $model = $this->query->updateOrCreate([$by => $byValue], $data);
+                $this->model = $this->query->updateOrCreate([$by => $byValue], $data);
 
                 DB::commit();
 
-                $this->notifyObserver($model, 'updated');
+                $this->trigger = 'updated';
 
-                return $model;
+                $this->notify();
+
+                return $this->model;
             } catch (Throwable $e) {
 
                 DB::rollBack();
@@ -62,13 +56,11 @@ abstract class Service
         try {
             DB::beginTransaction();
 
-            $model = $this->query->create($data);
+            $this->model = $this->query->create($data);
 
             DB::commit();
 
-            $this->notifyObserver($model, 'created');
-
-            return $model;
+            $this->trigger = 'created';
         } catch (Throwable $e) {
             DB::rollBack();
 
@@ -76,6 +68,9 @@ abstract class Service
             Log::error();
             Fail::throwFailException(message: $msg, throwable: $e);
         }
+
+        $this->notify();
+        return $this->model;
     }
 
     /**
@@ -91,10 +86,12 @@ abstract class Service
             $this->query->whereIn($by, $value)->delete();
         }
 
-        $model = $this->query->where($by, $value)->first();
+        $this->model = $this->query->where($by, $value)->first();
 
         try {
-            $model->delete();
+            $this->model->delete();
+
+            $this->trigger = 'deleted';
 
         } catch (LogicException $e) {
 
@@ -112,41 +109,7 @@ abstract class Service
             Fail::throwFailException(message: $error);
         }
 
-        $this->notifyObserver($model, 'deleted');
-
+        $this->notify();
         return true;
     }
-
-    /**
-     * 通知观察者
-     * @param Model $model
-     * @param string $method
-     * @return void
-     */
-    private function notifyObserver(Model $model, string $method): void
-    {
-        if (!is_null($this->observer)) {
-            $this->observer->{$method}($model);
-        }
-    }
-
-    /**
-     * 实例化观察者
-     * @param string $observer
-     * @return void
-     */
-    final protected function registerObserverInstance(string $observer): void
-    {
-        if (!is_subclass_of($observer, Observer::class)) {
-            self::throwFailException('模型(' . $observer . ')必须实现:[ ' . Observer::class . ' ]的方法');
-        }
-
-        $this->observer = app($observer);
-    }
-
-    /**
-     * 注册观察者
-     * @return void
-     */
-    abstract protected function registerObserver(): void;
 }
