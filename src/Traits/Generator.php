@@ -9,7 +9,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
 use Xgbnl\Business\Cache\Cacheable;
 use Xgbnl\Business\Enum\GeneratorEnum;
-use Xgbnl\Business\Fail;
+use Xgbnl\Business\Utils\Fail;
+use Xgbnl\Business\Utils\Helper;
 
 /**
  * @property-read Model $model
@@ -19,8 +20,8 @@ use Xgbnl\Business\Fail;
  */
 trait Generator
 {
-    private ?string $model = null;
-    private ?string $table = null;
+    private ?string $modelName = null;
+    private ?string $table     = null;
 
     final public function __get(string $name)
     {
@@ -34,11 +35,11 @@ trait Generator
 
     private function getModel(): string
     {
-        if (!is_null($this->model)) {
-            return $this->model;
+        if (!is_null($this->modelName)) {
+            return $this->modelName;
         }
 
-        $baseName = $this->strEndWith(
+        $baseName = Helper::strEndWith(
             last($this->getClazz()),
             [ucwords(GeneratorEnum::SERVICE), ucwords(GeneratorEnum::REPOSITORY)]
         );
@@ -47,7 +48,7 @@ trait Generator
 
         $this->resolveClassFail($clazz, '缺少模型 [ ' . $baseName . ' ]');
 
-        return $this->model = $clazz;
+        return $this->modelName = $clazz;
     }
 
     private function makeModel(string $parentClass = Model::class, string $callMethod = 'getModel', bool $instance = true, array $parameters = []): Cacheable|Model|string
@@ -59,7 +60,7 @@ trait Generator
         $class = $this->{$callMethod}();
 
         $modelType = match (true) {
-            str_ends_with($parentClass, 'Model') => '模型',
+            str_ends_with($parentClass, 'Model')     => '模型',
             str_ends_with($parentClass, 'Cacheable') => '仓库缓存',
         };
 
@@ -89,21 +90,6 @@ trait Generator
 
             Fail::throwFailException($e->getMessage());
         }
-    }
-
-    final static public function strEndWith(string $haystack, string|array $needle): string
-    {
-        if (is_string($needle)) {
-            return str_ends_with($haystack, $needle) ? substr($haystack, 0, -strlen($needle)) : $haystack;
-        }
-
-        foreach ($needle as $need) {
-            if (str_ends_with($haystack, $need)) {
-                return substr($haystack, 0, -strlen($need));
-            }
-        }
-
-        return $haystack;
     }
 
     private function getClazz(): array

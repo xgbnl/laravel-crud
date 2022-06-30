@@ -7,8 +7,9 @@ use Illuminate\Support\Facades\DB;
 use Xgbnl\Business\Cache\Cacheable;
 use Xgbnl\Business\Contacts\Magic;
 use Xgbnl\Business\Enum\GeneratorEnum;
-use Xgbnl\Business\Fail;
 use Xgbnl\Business\Traits\Generator;
+use Xgbnl\Business\Utils\Fail;
+use Xgbnl\Business\Utils\Helper;
 
 /**
  * @property-read Cacheable|null $cache
@@ -47,7 +48,7 @@ abstract class CacheGenerator implements Magic
         $ns = implode('\\', $clazz);
         $ns = $ns . '\\Caches\\';
 
-        $class = $this->strEndWith($class, GeneratorEnum::REPOSITORY);
+        $class = Helper::strEndWith($class, GeneratorEnum::REPOSITORY);
 
         $class = $ns . $class . 'Cacheable';
 

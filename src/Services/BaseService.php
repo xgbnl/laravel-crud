@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Xgbnl\Business\Services;
 
 use Exception;
-use Throwable;
-use LogicException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Xgbnl\Business\Fail;
+use LogicException;
+use Throwable;
 use Xgbnl\Business\Traits\Generator;
+use Xgbnl\Business\Utils\Fail;
 
 abstract class BaseService extends Observable
 {

@@ -4,8 +4,8 @@ namespace Xgbnl\Business\Cache;
 
 use Redis;
 use RedisException;
-use Xgbnl\Business\Fail;
 use Xgbnl\Business\Repositories\Repositories;
+use Xgbnl\Business\Utils\Fail;
 
 abstract class Cacheable
 {

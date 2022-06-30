@@ -3,10 +3,11 @@
 namespace Xgbnl\Business\Traits;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Xgbnl\Business\Services\BaseService;
 use Xgbnl\Business\Enum\GeneratorEnum;
 use Xgbnl\Business\Repositories\Repositories;
-use Xgbnl\Business\Fail;
+use Xgbnl\Business\Services\BaseService;
+use Xgbnl\Business\Utils\Fail;
+use Xgbnl\Business\Utils\Helper;
 
 trait BusinessHelpers
 {
@@ -81,7 +82,7 @@ trait BusinessHelpers
 
         $class = array_pop($parts);
 
-        $class = Repositories::strEndWith($class, 'Controller');
+        $class = Helper::strEndWith($class, 'Controller');
 
         $clazz = $ns . $class;
 

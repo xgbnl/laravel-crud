@@ -2,9 +2,9 @@
 
 namespace Xgbnl\Business\Services;
 
-use Xgbnl\Business\Contacts\Observer;
 use Illuminate\Database\Eloquent\Model;
-use Xgbnl\Business\Fail;
+use Xgbnl\Business\Contacts\Observer;
+use Xgbnl\Business\Utils\Fail;
 
 abstract class Observable
 {
