@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use LogicException;
 use Throwable;
-use Xgbnl\Business\Traits\Generator;
+use Xgbnl\Business\Traits\BuilderGenerator;
 use Xgbnl\Business\Utils\Fail;
 
 abstract class BaseService extends Observable
 {
-    use Generator;
+    use BuilderGenerator;
 
     /**
      * 创建模型或更新模型

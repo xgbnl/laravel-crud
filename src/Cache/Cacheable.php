@@ -9,7 +9,7 @@ use Xgbnl\Business\Utils\Fail;
 
 abstract class Cacheable
 {
-    protected ?Repositories $repositories = null;
+    protected ?Repositories $repositories;
 
     protected ?Redis $redis = null;
 
@@ -18,9 +18,9 @@ abstract class Cacheable
     // Cacheable Fields
     protected array $cacheFields = [];
 
-    final public function __construct(Repositories $repository = null)
+    final public function __construct(Repositories $repositories = null)
     {
-        $this->repositories = $repository;
+        $this->repositories = $repositories;
 
         $this->connectRedis(env('REPOSITORY_CACHE', 'default'));
     }

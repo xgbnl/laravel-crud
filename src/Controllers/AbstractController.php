@@ -4,11 +4,11 @@ namespace Xgbnl\Business\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Xgbnl\Business\Traits\BusinessHelpers;
+use Xgbnl\Business\Traits\BusinessGenerator;
 
 abstract class AbstractController extends Controller
 {
-    use BusinessHelpers;
+    use BusinessGenerator;
 
     protected ?Request $request = null;
 

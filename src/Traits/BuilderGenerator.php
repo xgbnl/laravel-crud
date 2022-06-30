@@ -7,7 +7,6 @@ use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Log;
-use Xgbnl\Business\Cache\Cacheable;
 use Xgbnl\Business\Enum\GeneratorEnum;
 use Xgbnl\Business\Utils\Fail;
 use Xgbnl\Business\Utils\Helper;
@@ -16,9 +15,8 @@ use Xgbnl\Business\Utils\Helper;
  * @property-read Model $model
  * @property-read string|null $table
  * @property-read EloquentBuilder $query
- *
  */
-trait Generator
+trait BuilderGenerator
 {
     private ?string $modelName = null;
     private ?string $table     = null;
@@ -51,22 +49,13 @@ trait Generator
         return $this->modelName = $clazz;
     }
 
-    private function makeModel(string $parentClass = Model::class, string $callMethod = 'getModel', bool $instance = true, array $parameters = []): Cacheable|Model|string
+    private function makeModel(bool $instance = true): Model|string
     {
-        if (!method_exists($this, $callMethod)) {
-            Fail::throwFailException(message: '调用的方法[ ' . $callMethod . ' ]不存在');
-        }
+        $class = $this->getModel();
 
-        $class = $this->{$callMethod}();
+        if (!is_subclass_of($class, Model::class)) {
 
-        $modelType = match (true) {
-            str_ends_with($parentClass, 'Model')     => '模型',
-            str_ends_with($parentClass, 'Cacheable') => '仓库缓存',
-        };
-
-        if (!is_subclass_of($class, $parentClass)) {
-
-            $msg = $modelType . '文件 [ ' . $class . ' ]错误,必须继承 [ ' . $parentClass . ' ]';
+            $msg = '模型文件 [ ' . $class . ' ]错误,必须继承 [ ' . Model::class . ' ]';
 
             Log::error($msg);
             Fail::throwFailException($msg);
@@ -77,15 +66,11 @@ trait Generator
         }
 
         try {
-            if (!empty($parameters)) {
-                return app($class, $parameters);
-            }
 
             return app($class);
-
         } catch (BindingResolutionException $exception) {
 
-            Fail::throwFailException(message: $modelType . '文件实例化时错误:', throwable: $exception->getTrace());
+            Fail::throwFailException(message: '模型文件实例化时错误:', throwable: $exception->getTrace());
         } catch (Exception $e) {
 
             Fail::throwFailException($e->getMessage());
