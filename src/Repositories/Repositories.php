@@ -9,57 +9,44 @@ use Illuminate\Database\Eloquent\Model;
 
 abstract class Repositories extends CacheGenerator
 {
-    // Store models
+    // 存储模型
     private array $models = [];
 
-    // Search filter fields
+    // 过滤搜索关键字
     protected array $searchFilters = [];
 
-    // Load model with relation fields
+    // 需要加载的模型关系
     protected array $relations = [];
 
-    // Except paginator fields
+    // 如果前端分页参数是数组成员，则忽略
     protected array $excepts = [
         'pageNum',
         'pageSize',
     ];
 
-    /**
-     * Call sub class transform
-     * @param Model|null $model
-     * @return array
-     */
-    final public function transform(?Model $model): array
+    private function transform(?Model $model): array
     {
-        if (is_null($model)) {
-            return [];
-        }
-
-        return $this->doTransform($model);
+        return is_null($model) ? [] : $this->doTransform($model);
     }
 
     /**
-     * Query data by id or other field.
+     * 通过给定字段查找模型
      * @param mixed $value
      * @param string $by
      * @param array $with
      * @param array $columns
-     * @param bool $array
+     * @param bool $array true返回数组，false返回模型对象
      * @return array|Model|null
      */
     final public function find(mixed $value, string $by = 'id', array $with = [], array $columns = ['*'], bool $array = true): array|Model|null
     {
         $model = $this->checkWith($with)->where($by, $value)->first($columns);
 
-        if ($array) {
-            return $this->transform($model);
-        }
-
-        return $model;
+        return $array ? $this->transform($model) : $model;
     }
 
     /**
-     * 获取所有数据
+     * 获取所有模型
      * @param array $with
      * @param int $count
      * @return array
@@ -117,14 +104,7 @@ abstract class Repositories extends CacheGenerator
     {
         $relation = !empty($with) ? $with : $this->relations;
 
-        if (!empty($relation)) {
-
-            $query = clone $this->query;
-
-            return $query->with($relation);
-        }
-
-        return clone $this->query;
+        return !empty($relation) ? clone $this->query->with($relation) : clone $this->query;
     }
 
     // abstract methods
