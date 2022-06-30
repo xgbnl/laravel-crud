@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace DummyNamespace;
 
-use Xgbnl\Business\Business\Service;
+use Xgbnl\Business\Business\Services\BaseService;
 
-class DummyClass extends Service
+class DummyClass extends BaseService
 {
-   protected function registerObserver(): void
+   protected function configure(): void
    {
      // TODO: Implement registerObserver() method.
    }

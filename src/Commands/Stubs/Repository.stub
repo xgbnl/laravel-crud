@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace DummyNamespace;
 
-use Xgbnl\Business\Business\Repository;
+use Xgbnl\Business\Business\Repositories\Repositories;
 use Illuminate\Database\Eloquent\Model;
 
-class DummyClass extends Repository
+class DummyClass extends Repositories
 {
     protected function doTransformer(Model $model): array
     {
