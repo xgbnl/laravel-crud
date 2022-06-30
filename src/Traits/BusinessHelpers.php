@@ -86,7 +86,8 @@ trait BusinessHelpers
         $ns = match ($business) {
             GeneratorEnum::SERVICE    => array_shift($parts) . '\\Services\\',
             GeneratorEnum::REPOSITORY => array_shift($parts) . '\\Repositories\\',
-            GeneratorEnum::REQUEST    => array_shift($parts) . '\\Http\\Requests\\'
+            GeneratorEnum::REQUEST    => array_shift($parts) . '\\Http\\Requests\\',
+            GeneratorEnum::CACHE      => array_shift($parts) . '\\Caches\\',
         };
 
         $class = array_pop($parts);
