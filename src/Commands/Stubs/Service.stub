@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace DummyNamespace;
 
-use Xgbnl\Business\Business\Services\BaseService;
+use Xgbnl\Business\Services\BaseService;
 
 class DummyClass extends BaseService
 {
