@@ -34,13 +34,12 @@ abstract class Repositories extends CacheGenerator
      * @param mixed $value
      * @param string $by
      * @param array $with
-     * @param array $columns
      * @param bool $array true返回数组，false返回模型对象
      * @return array|Model|null
      */
-    final public function find(mixed $value, string $by = 'id', array $with = [], array $columns = ['*'], bool $array = true): array|Model|null
+    final public function find(mixed $value, string $by = 'id', array $with = [], bool $array = true): array|Model|null
     {
-        $model = $this->checkWith($with)->where($by, $value)->first($columns);
+        $model = $this->checkWith($with)->where($by, $value)->first();
 
         return $array ? $this->transform($model) : $model;
     }
@@ -51,7 +50,7 @@ abstract class Repositories extends CacheGenerator
      * @param int $count
      * @return array
      */
-    final public function fetchAll(array $with = [], int $count = 100,): array
+    final public function fetchAll(array $with = [], int $count = 100): array
     {
         $this->checkWith($with)->chunkById($count, function ($models) {
             $models->map(function ($model) {
