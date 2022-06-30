@@ -15,7 +15,7 @@ use Xgbnl\Business\Utils\Helper;
  * @property BaseService $service
  * @property Cacheable $cache
  */
-trait BusinessHelpers
+trait BusinessGenerator
 {
     private ?string $businessModel = null;
 
@@ -32,20 +32,20 @@ trait BusinessHelpers
     {
         $class = $this->checkBusiness($business);
 
-        $parentClass = match ($business) {
-            GeneratorEnum::REPOSITORY => Repositories::class,
-            GeneratorEnum::SERVICE    => BaseService::class,
-            GeneratorEnum::CACHE      => Cacheable::class,
+        ['class' => $parentClass, 'type' => $type] = match ($business) {
+            GeneratorEnum::REPOSITORY => ['class' => Repositories::class, 'type' => '仓库'],
+            GeneratorEnum::SERVICE    => ['class' => BaseService::class, 'type' => '服务'],
+            GeneratorEnum::CACHE      => ['class' => Cacheable::class, 'type' => '缓存'],
         };
 
         if (!is_subclass_of($class, $parentClass)) {
-            Fail::throwFailException(message: '获取业务模型[ ' . $class . ' ]错误,必须继承: [' . $parentClass . ' ]');
+            Fail::throwFailException(message: '获取' . $type . '模型[ ' . $class . ' ]错误,必须继承: [' . $parentClass . ' ]');
         }
 
         try {
             return !empty($params) ? app($class, $params) : app($class);
         } catch (\Exception $e) {
-            Fail::throwFailException(message: '实例化业务模型出错:[ ' . $e->getMessage() . ' ]');
+            Fail::throwFailException(message: '实例化' . $type . '模型出错:[ ' . $e->getMessage() . ' ]');
         }
     }
 

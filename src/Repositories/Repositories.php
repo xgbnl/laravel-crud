@@ -7,17 +7,8 @@ namespace Xgbnl\Business\Repositories;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
-abstract class Repositories extends CacheGenerator
+abstract class Repositories extends AbstractRepositories
 {
-    // 存储模型
-    private array $models = [];
-
-    // 过滤搜索关键字
-    protected array $searchFilters = [];
-
-    // 需要加载的模型关系
-    protected array $relations = [];
-
     // 如果前端分页参数是数组成员，则忽略
     protected array $excepts = [
         'pageNum',
@@ -105,7 +96,4 @@ abstract class Repositories extends CacheGenerator
 
         return !empty($relation) ? clone $this->query->with($relation) : clone $this->query;
     }
-
-    // abstract methods
-    abstract protected function doTransform(Model $model): array;
 }
