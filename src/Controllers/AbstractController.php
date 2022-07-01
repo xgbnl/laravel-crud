@@ -6,12 +6,13 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use ReflectionException;
 use Xgbnl\Business\Traits\BusinessGenerator;
+use Xgbnl\Business\Traits\ReflectionParse;
 use Xgbnl\Business\Utils\MagicMethods;
 use ReflectionClass;
 
 abstract class AbstractController extends Controller
 {
-    use BusinessGenerator;
+    use BusinessGenerator,ReflectionParse;
 
     protected ?Request $request = null;
 
@@ -44,33 +45,5 @@ abstract class AbstractController extends Controller
         }
 
         return $this->parseMethod($reflection, $method, $parameters);
-    }
-
-    /**
-     * @throws ReflectionException
-     */
-    private function parseMethod(ReflectionClass $reflectionClass, string $method, array $parameters)
-    {
-        $magicMethod = $reflectionClass->getMethod($method);
-
-        $params = [];
-
-        foreach ($magicMethod->getParameters() as $key => $parameter) {
-
-            if (isset($parameters[$parameter->getName()])) {
-
-                $params[] = $parameters[$parameter->getName()];
-
-            } elseif ($parameter->isDefaultValueAvailable() && !isset($parameters[$key])) {
-
-                $params[] = $parameter->getDefaultValue();
-
-            } elseif (isset($parameters[$key])) {
-
-                $params[] = $parameters[$key];
-            }
-        }
-
-        return $magicMethod->invoke(null, ...$params);
     }
 }
