@@ -4,11 +4,8 @@ namespace Xgbnl\Business\Traits;
 
 use ReflectionClass;
 use ReflectionException;
-use Xgbnl\Business\Attributes\Business;
 use Xgbnl\Business\Utils\Fail;
-use Xgbnl\Business\Utils\MagicMethods;
 
-#[Business(MagicMethods::class)]
 trait ReflectionParse
 {
     private ?string $refClass = null;
