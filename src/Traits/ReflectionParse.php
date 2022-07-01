@@ -13,7 +13,7 @@ trait ReflectionParse
     /**
      * @throws ReflectionException
      */
-    public function __call(string $method, array $parameters)
+    public function __call($method, $parameters)
     {
         $attributes = $this->parseAttributes();
 
