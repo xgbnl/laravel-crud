@@ -1,12 +1,8 @@
 ## Business Helper
 
-### 架构图
-![image](diagram.jpg)
-
-### 环境
-> php8.0 或 php8.1
-> 
-> `Laravel8`或`Laravel9`以上
+### 支持环境及框架
+- php8.1
+- Laravel 9
 
 ### 简单使用
 
@@ -22,7 +18,7 @@ composer require xgbnl/laravel-businesshelper
 php artisan business:publish 
 ```
 
-- 此项目可能会使用缓存,如果你需要使用缓存，请配置`redis`
+- 此包会使用缓存，请配置`redis`
 
 ```dotenv
 REPOSITORY_CACHE=cache
@@ -32,7 +28,7 @@ REDIS_PASSWORD=123456
 REDIS_PORT=6379
 ```
 
-- 编辑 `config/database.php`
+- 编辑 `config/database.php`，添加新的键值`cache`
 
 ```php 
 'redis' => [
