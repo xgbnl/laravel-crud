@@ -41,6 +41,6 @@ class MagicMethods
 
     static public function filter(array $arrays): array
     {
-        return array_filter($arrays, fn($item) => !empty($item));
+        return array_values(array_filter($arrays, fn($item) => !empty($item)));
     }
 }
