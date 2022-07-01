@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Xgbnl\Business\Traits;
+namespace Xgbnl\Business\Utils;
 
-use Xgbnl\Business\Paginator\Paginator;
 use Illuminate\Http\JsonResponse;
+use Xgbnl\Business\Paginator\Paginator;
 
-trait ControllerHelpers
+class MagicMethods
 {
-    final protected function json(mixed $data = null, int $code = 200): JsonResponse
+    static public function json(mixed $data = null, int $code = 200): JsonResponse
     {
         $r = ['msg' => null, 'code' => $code];
 
@@ -22,10 +22,10 @@ trait ControllerHelpers
         return new JsonResponse($r);
     }
 
-    final protected function customPaginate(array $list = [], bool $isPaginate = true): Paginator
+    static public function customPaginate(array $list = [], bool $isPaginate = true): Paginator
     {
-        $pageNum  = (int)$this->request->get('pageNum', 1);
-        $pageSize = (int)$this->request->get('pageSize', 10);
+        $pageNum  = (int)request()->get('pageNum', 1);
+        $pageSize = (int)request()->get('pageSize', 10);
 
         $offset = ($pageNum * $pageSize) - $pageSize;
 

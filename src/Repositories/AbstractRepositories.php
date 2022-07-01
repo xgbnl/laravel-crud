@@ -34,6 +34,11 @@ abstract class AbstractRepositories implements Magic
      */
     protected array $relations = [];
 
+    /**
+     * 获取原生查询
+     * @param string $propertyName
+     * @return QueryBuilder
+     */
     public function magicGet(string $propertyName): QueryBuilder
     {
         return match ($propertyName) {

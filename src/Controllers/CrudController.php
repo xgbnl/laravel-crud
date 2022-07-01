@@ -2,9 +2,9 @@
 
 namespace Xgbnl\Business\Controllers;
 
-use Xgbnl\Business\Paginator\Paginator;
 use Illuminate\Http\JsonResponse;
-use Xgbnl\Business\Traits\ControllerHelpers;
+use Xgbnl\Business\Paginator\Paginator;
+use Xgbnl\Business\Utils\MagicMethods;
 
 /**
  * @method JsonResponse json(mixed $data = null, int $code = 200)
@@ -12,8 +12,6 @@ use Xgbnl\Business\Traits\ControllerHelpers;
  */
 abstract class CrudController extends AbstractController
 {
-    use ControllerHelpers;
-
     final protected function doIndex(): JsonResponse
     {
         $models = $this->repository->filterSearch($this->request->all());
