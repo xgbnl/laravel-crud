@@ -25,8 +25,8 @@ trait ReflectionParse
 
         foreach ($objects as $object) {
 
-            if (!class_exists($this->refClass)) {
-                Fail::throwFailException('所引入的类:(' . $this->refClass . ')不存在,请检查类');
+            if (!class_exists($object)) {
+                Fail::throwFailException('所引入的类:(' . $object . ')不存在,请检查类');
             }
 
             if (method_exists($object, $method)) {
