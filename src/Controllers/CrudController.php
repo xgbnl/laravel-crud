@@ -4,11 +4,11 @@ namespace Xgbnl\Business\Controllers;
 
 use Illuminate\Http\JsonResponse;
 use Xgbnl\Business\Paginator\Paginator;
-use Xgbnl\Business\Utils\MagicMethods;
 
 /**
  * @method JsonResponse json(mixed $data = null, int $code = 200)
  * @method Paginator customPaginate(array $list = [], bool $isPaginate = true)
+ * @method array filter(array $arrays)
  */
 abstract class CrudController extends AbstractController
 {
@@ -44,7 +44,7 @@ abstract class CrudController extends AbstractController
 
         abort_if(empty($validated), 422, '插入数据不能为空');
 
-        $validated = array_filter($validated, fn($item) => !empty($item));
+        $validated = $this->filter($validated);
 
         if (is_string($filterFields) && isset($validated[$filterFields])) {
             unset($validated[$filterFields]);
@@ -78,7 +78,7 @@ abstract class CrudController extends AbstractController
 
         abort_if(empty($this->request->all()), 422, '无效的删除');
 
-        $ids = array_filter($this->request->all(), fn($val) => !empty($val));
+        $ids = $this->filter($this->request->all());
 
         $this->service->destroy($ids);
 

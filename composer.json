@@ -1,31 +1,32 @@
 {
-    "name": "xgbnl/laravel-businesshelper",
-    "description": "\uD83D\uDE80非常简单的CRUD工具，业务分层模式使开发更简单",
-    "type": "library",
-    "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Xgbnl\\Business\\": "src/"
-        }
-    },
-    "authors": [
-        {
-            "name": "df",
-            "email": "745502274@qq.com"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require": {
-        "ext-redis": "*"
-    },
-    "extra": {
-        "laravel": {
-            "providers": [
-                "Xgbnl\\Business\\Providers\\BusinessServiceProvider"
-            ],
-            "aliases": {
-                "business": "Xgbnl\\Business\\Facades\\BusinessFacade"
-            }
-        }
+  "name": "xgbnl/laravel-businesshelper",
+  "description": "\uD83D\uDE80非常简单的CRUD工具，业务分层模式使开发更简单",
+  "type": "library",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Xgbnl\\Business\\": "src/"
     }
+  },
+  "authors": [
+    {
+      "name": "df",
+      "email": "745502274@qq.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "ext-redis": "*",
+    "ext-http": "*"
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Xgbnl\\Business\\Providers\\BusinessServiceProvider"
+      ],
+      "aliases": {
+        "business": "Xgbnl\\Business\\Facades\\BusinessFacade"
+      }
+    }
+  }
 }

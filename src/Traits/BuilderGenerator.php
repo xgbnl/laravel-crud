@@ -3,13 +3,14 @@
 namespace Xgbnl\Business\Traits;
 
 use Exception;
-use Illuminate\Contracts\Container\BindingResolutionException;
-use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Log;
-use Xgbnl\Business\Enum\GeneratorEnum;
+use Xgbnl\Business\Attributes\Business;
 use Xgbnl\Business\Utils\Fail;
 use Xgbnl\Business\Utils\Helper;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Model;
+use Xgbnl\Business\Enum\GeneratorEnum;
+use Illuminate\Contracts\Container\BindingResolutionException;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 
 /**
  * @property-read Model $model
@@ -38,14 +39,15 @@ trait BuilderGenerator
         }
 
         $baseName = Helper::strEndWith(
-            last($this->getClazz()),
+            last(explode('\\', get_called_class())),
             [ucwords(GeneratorEnum::SERVICE), ucwords(GeneratorEnum::REPOSITORY)]
         );
 
         $clazz = 'App\\Models\\' . $baseName;
 
-        $this->resolveClassFail($clazz, '缺少模型 [ ' . $baseName . ' ]');
-
+        if (!class_exists($clazz)) {
+            Fail::throwFailException(message: '缺少模型 [ ' . $baseName . ' ]');
+        }
         return $this->modelName = $clazz;
     }
 
@@ -58,6 +60,7 @@ trait BuilderGenerator
             $msg = '模型文件 [ ' . $class . ' ]错误,必须继承 [ ' . Model::class . ' ]';
 
             Log::error($msg);
+
             Fail::throwFailException($msg);
         }
 
@@ -74,18 +77,6 @@ trait BuilderGenerator
         } catch (Exception $e) {
 
             Fail::throwFailException($e->getMessage());
-        }
-    }
-
-    private function getClazz(): array
-    {
-        return explode('\\', get_called_class());
-    }
-
-    private function resolveClassFail(string $class, string $message): void
-    {
-        if (!class_exists($class)) {
-            Fail::throwFailException(message: $message);
         }
     }
 }

@@ -38,4 +38,9 @@ class MagicMethods
             'pageName' => 'pageNum',
         ]);
     }
+
+    static public function filter(array $arrays): array
+    {
+        return array_filter($arrays, fn($item) => !empty($item));
+    }
 }

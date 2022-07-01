@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Xgbnl\Business\Utils;
 
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 use Xgbnl\Business\Enum\ResponseEnum;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class Fail
+final class Fail
 {
     final static public function throwFailException(string $message, int $code = ResponseEnum::SERVER_ERROR, Throwable $throwable = null)
     {
