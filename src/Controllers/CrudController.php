@@ -84,4 +84,15 @@ abstract class CrudController extends AbstractController
 
         return $this->json();
     }
+
+    final protected function getKey(string $by = 'id', string $method = 'input'): mixed
+    {
+        if (!in_array($method, ['input', 'get'])) {
+            abort(500, '调用方式只能为input或get');
+        }
+
+        $id = $this->request->{$method}($by);
+
+        return !empty($id) ? $id : abort(422, 'id不能为空');
+    }
 }
