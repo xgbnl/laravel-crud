@@ -65,7 +65,7 @@ abstract class BaseService extends Observable
             DB::rollBack();
 
             $msg = '创建数据错误 [ ' . $e->getMessage() . ' ]';
-            Log::error();
+            Log::error($msg);
             Fail::throwFailException(message: $msg, throwable: $e);
         }
 
