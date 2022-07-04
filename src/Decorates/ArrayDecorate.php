@@ -10,7 +10,7 @@ use Xgbnl\Business\Decorates\Contacts\Decorate;
 #[BusinessTag('数组包装器')]
 class ArrayDecorate implements Decorate
 {
-    public function filter(array &$origin, mixed $fields): array
+    public function filter(array $origin, mixed $fields): array
     {
         foreach ($fields as $field) {
             if (isset($origin[$field])) {
@@ -22,7 +22,7 @@ class ArrayDecorate implements Decorate
         return $origin;
     }
 
-    public function arrayFields(array &$origin, mixed $fields): array
+    public function arrayFields(array $origin, mixed $fields): array
     {
         $items = [];
 
