@@ -70,7 +70,7 @@ class MagicMethods
      * @param bool $returnOrigin
      * @return array
      */
-    static public function filterFields(array &$origin, mixed $fields,bool $returnOrigin = true): array
+    static public function filterFields(array $origin, mixed $fields,bool $returnOrigin = true): array
     {
         $decorate = DecorateFactory::builderDecorate($fields);
 
