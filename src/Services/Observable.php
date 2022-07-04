@@ -2,13 +2,14 @@
 
 namespace Xgbnl\Business\Services;
 
+use HttpRuntimeException;
 use Illuminate\Database\Eloquent\Model;
 use Xgbnl\Business\Contacts\Observer;
 use Xgbnl\Business\Utils\Fail;
 
 abstract class Observable
 {
-    protected ?Model $model = null;
+    protected ?Model $modelClass = null;
 
     protected ?Observer $observer = null;
 
@@ -24,10 +25,13 @@ abstract class Observable
     protected function notify(): void
     {
         if (!is_null($this->observer)) {
-            $this->observer->{$this->trigger}($this->model);
+            $this->observer->{$this->trigger}($this->modelClass);
         }
     }
 
+    /**
+     * @throws HttpRuntimeException
+     */
     protected function observer(string $observer): void
     {
         if (!is_subclass_of($observer, Observer::class)) {

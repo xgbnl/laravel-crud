@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use LogicException;
 use ReflectionClass;
-use ReflectionException;
 use Throwable;
 use Xgbnl\Business\Traits\BuilderGenerator;
 use Xgbnl\Business\Utils\Fail;
