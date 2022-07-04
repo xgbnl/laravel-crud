@@ -128,7 +128,7 @@ abstract class BaseService extends Observable
      * @throws ReflectionException
      * @throws HttpRuntimeException
      */
-    protected function getModelProperty(string $property = 'fillable'): array
+    final public function getModelProperty(string $property = 'fillable'): array
     {
         $ref = new ReflectionClass($this->modelName);
 
