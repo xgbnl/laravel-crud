@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Xgbnl\Business\Controllers;
 
 use Illuminate\Http\JsonResponse;
@@ -9,8 +11,7 @@ use Xgbnl\Business\Paginator\Paginator;
  * @method JsonResponse json(mixed $data = null, int $code = 200)
  * @method Paginator customPaginate(array $list = [], bool $isPaginate = true)
  * @method array filter(array $arrays)
- * @method array filterFields(array &$origin, mixed $fields)
- * @method array arrayFields(array &$origin, mixed $fields)
+ * @method array filterFields(array &$origin, mixed $fields,bool $returnOrigin = true)
  * @method void trigger(int $code, string $message)
  */
 abstract class CrudController extends AbstractController

@@ -67,22 +67,16 @@ class MagicMethods
      * Custom array field filtering.
      * @param array $origin
      * @param array|string $fields
+     * @param bool $returnOrigin
      * @return array
      */
-    static public function filterFields(array &$origin, mixed $fields): array
+    static public function filterFields(array &$origin, mixed $fields,bool $returnOrigin = true): array
     {
-        return DecorateFactory::builderDecorate($fields)->filter($origin, $fields);
-    }
+        $decorate = DecorateFactory::builderDecorate($fields);
 
-    /**
-     * Get array by supply fields.
-     * @param array $origin
-     * @param mixed $fields
-     * @return array
-     */
-    static public function arrayFields(array &$origin, mixed $fields): array
-    {
-        return DecorateFactory::builderDecorate($fields)->arrayFields($origin, $fields);
+        return $returnOrigin
+            ? $decorate->filter($origin,$fields)
+            : $decorate->arrayFields($origin,$fields);
     }
 
     /**
