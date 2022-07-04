@@ -9,6 +9,12 @@ use Xgbnl\Business\Paginator\Paginator;
 
 class MagicMethods
 {
+    /**
+     * Custom return json
+     * @param mixed|null $data
+     * @param int $code
+     * @return JsonResponse
+     */
     static public function json(mixed $data = null, int $code = 200): JsonResponse
     {
         $r = ['msg' => null, 'code' => $code];
@@ -22,6 +28,12 @@ class MagicMethods
         return new JsonResponse($r);
     }
 
+    /**
+     * Custom paginate.
+     * @param array $list
+     * @param bool $isPaginate
+     * @return Paginator
+     */
     static public function customPaginate(array $list = [], bool $isPaginate = true): Paginator
     {
         $pageNum  = (int)request()->get('pageNum', 1);
@@ -39,8 +51,36 @@ class MagicMethods
         ]);
     }
 
-    static public function filter(array $arrays): array
+    /**
+     * Custom filter array.
+     * @param array $origin
+     * @return array
+     */
+    static public function filter(array $origin): array
     {
-        return array_values(array_filter($arrays, fn($item) => !empty($item)));
+        return array_filter($origin,fn($data) => !empty($data));
+    }
+
+    /**
+     * Custom array field filtering.
+     * @param array $origin
+     * @param array|string $fields
+     * @return array
+     */
+    final protected function filterFields(array &$origin, array|string $fields): array
+    {
+        if (is_string($fields) && isset($origin[$fields])) {
+            unset($origin[$fields]);
+        }
+
+        if (is_array($fields)) {
+            foreach ($fields as $field) {
+                if (isset($origin[$field])) {
+                    unset($origin[$field]);
+                }
+            }
+        }
+
+        return $origin;
     }
 }
