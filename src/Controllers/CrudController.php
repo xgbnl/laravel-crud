@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Xgbnl\Business\Controllers;
 
+use HttpRuntimeException;
 use Illuminate\Http\JsonResponse;
 use Xgbnl\Business\Paginator\Paginator;
 
@@ -59,6 +60,9 @@ abstract class CrudController extends AbstractController
         return $this->json();
     }
 
+    /**
+     * @throws HttpRuntimeException
+     */
     final protected function doDestroy(?int $id = null): JsonResponse
     {
         if (!is_null($id)) {

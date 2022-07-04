@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Xgbnl\Business\Utils;
 
-use HttpException;
+use HttpInvalidParamException;
 use Illuminate\Http\JsonResponse;
 use Xgbnl\Business\Decorates\Factory\DecorateFactory;
 use Xgbnl\Business\Paginator\Paginator;
@@ -84,10 +84,10 @@ class MagicMethods
      * @param int $code
      * @param string $message
      * @return void
-     * @throws HttpException
+     * @throws HttpInvalidParamException
      */
     static public function trigger(int $code, string $message): void
     {
-        throw new HttpException($message, $code);
+        throw new HttpInvalidParamException($message, $code);
     }
 }
