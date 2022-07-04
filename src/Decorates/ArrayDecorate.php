@@ -26,12 +26,11 @@ class ArrayDecorate implements Decorate
     {
         $items = [];
 
-        foreach ($fields as $field) {
+        array_map(function ($field) use ($origin, &$items) {
             if (isset($origin[$field])) {
                 $items[$field] = $origin[$field];
             }
-        }
-        unset($field);
+        }, $fields);
 
         return $items;
     }
