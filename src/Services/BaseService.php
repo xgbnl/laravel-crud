@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Xgbnl\Business\Services;
 
 use Exception;
-use HttpRuntimeException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +24,6 @@ abstract class BaseService extends Observable
      * @param array $data 需要更新的数据
      * @param string $by 默认为根据id更新
      * @return Model
-     * @throws HttpRuntimeException
      */
     final public function createOrUpdate(array $data, string $by = 'id'): Model
     {
@@ -82,7 +80,6 @@ abstract class BaseService extends Observable
      * @param int|array $value
      * @param string $by
      * @return bool
-     * @throws HttpRuntimeException
      */
     final public function destroy(int|array $value, string $by = 'id'): bool
     {
@@ -103,14 +100,14 @@ abstract class BaseService extends Observable
 
             Log::error($error);
 
-            Fail::throwFailException(message: $error);
+            Fail::throwFailException(message: $error,throwable: $e);
         } catch (Exception $e) {
 
             $error = class_basename($this) . '::destroy' . '删除数据失败:[ ' . $e->getMessage() . ' ]';
 
             Log::error($error);
 
-            Fail::throwFailException(message: $error);
+            Fail::throwFailException(message: $error,throwable: $e);
         }
 
         $this->notify();
@@ -124,7 +121,6 @@ abstract class BaseService extends Observable
 
     /**
      * 获取模型属性
-     * @throws HttpRuntimeException
      */
     final public function getModelProperty(string $property = 'fillable'): array
     {
