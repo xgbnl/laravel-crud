@@ -125,12 +125,11 @@ abstract class BaseService extends Observable
 
     /**
      * 获取模型属性
-     * @throws ReflectionException
      * @throws HttpRuntimeException
      */
     final public function getModelProperty(string $property = 'fillable'): array
     {
-        $ref = new ReflectionClass($this->modelName);
+        $ref = new ReflectionClass($this->model);
 
        return $ref->hasProperty($property)
            ? $ref->getProperty($property)->getDefaultValue()
