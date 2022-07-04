@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace Xgbnl\Business\Services;
 
 use Exception;
+use HttpRuntimeException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use LogicException;
+use ReflectionClass;
+use ReflectionException;
 use Throwable;
 use Xgbnl\Business\Traits\BuilderGenerator;
 use Xgbnl\Business\Utils\Fail;
@@ -23,6 +26,7 @@ abstract class BaseService extends Observable
      * @param array $data 需要更新的数据
      * @param string $by 默认为根据id更新
      * @return Model
+     * @throws HttpRuntimeException
      */
     final public function createOrUpdate(array $data, string $by = 'id'): Model
     {
@@ -79,6 +83,7 @@ abstract class BaseService extends Observable
      * @param int|array $value
      * @param string $by
      * @return bool
+     * @throws HttpRuntimeException
      */
     final public function destroy(int|array $value, string $by = 'id'): bool
     {
@@ -116,5 +121,19 @@ abstract class BaseService extends Observable
     protected function registerObserver(): void
     {
         $this->observer = null;
+    }
+
+    /**
+     * 获取模型属性
+     * @throws ReflectionException
+     * @throws HttpRuntimeException
+     */
+    protected function getModelProperty(string $property = 'fillable'): array
+    {
+        $ref = new ReflectionClass($this->modelName);
+
+       return $ref->hasProperty($property)
+           ? $ref->getProperty($property)->getDefaultValue()
+           : Fail::throwFailException('模型'.$this->modelName.'不存在属性:['.$property.']');
     }
 }
