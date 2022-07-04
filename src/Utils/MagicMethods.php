@@ -6,6 +6,7 @@ namespace Xgbnl\Business\Utils;
 
 use HttpException;
 use Illuminate\Http\JsonResponse;
+use Xgbnl\Business\Decorates\Factory\DecorateFactory;
 use Xgbnl\Business\Paginator\Paginator;
 
 class MagicMethods
@@ -68,21 +69,20 @@ class MagicMethods
      * @param array|string $fields
      * @return array
      */
-    static public function filterFields(array &$origin, array|string $fields): array
+    static public function filterFields(array &$origin, mixed $fields): array
     {
-        if (is_string($fields) && isset($origin[$fields])) {
-            unset($origin[$fields]);
-        }
+        return DecorateFactory::builderDecorate($fields)->filter($origin, $fields);
+    }
 
-        if (is_array($fields)) {
-            foreach ($fields as $field) {
-                if (isset($origin[$field])) {
-                    unset($origin[$field]);
-                }
-            }
-        }
-
-        return $origin;
+    /**
+     * Get array by supply fields.
+     * @param array $origin
+     * @param mixed $fields
+     * @return array
+     */
+    static public function arrayFields(array &$origin, mixed $fields): array
+    {
+        return DecorateFactory::builderDecorate($fields)->arrayFields($origin, $fields);
     }
 
     /**

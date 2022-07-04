@@ -19,7 +19,7 @@ class StringDecorate implements Decorate
         return $origin;
     }
 
-    public function arrayFields(array $origin, mixed $fields): array
+    public function arrayFields(array &$origin, mixed $fields): array
     {
         if (!isset($origin[$fields])) {
             return [];
