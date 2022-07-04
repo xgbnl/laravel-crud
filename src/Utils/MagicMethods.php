@@ -6,6 +6,7 @@ namespace Xgbnl\Business\Utils;
 
 use HttpInvalidParamException;
 use Illuminate\Http\JsonResponse;
+use InvalidArgumentException;
 use Xgbnl\Business\Decorates\Factory\DecorateFactory;
 use Xgbnl\Business\Paginator\Paginator;
 
@@ -84,10 +85,9 @@ class MagicMethods
      * @param int $code
      * @param string $message
      * @return void
-     * @throws HttpInvalidParamException
      */
     static public function trigger(int $code, string $message): void
     {
-        throw new HttpInvalidParamException($message, $code);
+        throw new InvalidArgumentException($message, $code);
     }
 }

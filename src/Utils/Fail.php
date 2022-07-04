@@ -6,15 +6,15 @@ namespace Xgbnl\Business\Utils;
 
 use Throwable;
 use Xgbnl\Business\Enum\ResponseEnum;
-use HttpRuntimeException;
+use Xgbnl\Business\Exceptions\CustomException;
 
 final class Fail
 {
     /**
-     * @throws HttpRuntimeException
+     * @throws CustomException
      */
     final static public function throwFailException(string $message, int $code = ResponseEnum::SERVER_ERROR, Throwable $throwable = null)
     {
-        throw new HttpRuntimeException( $message, $code,$throwable);
+        throw new CustomException( $message, $code,$throwable);
     }
 }
