@@ -20,16 +20,21 @@ use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 trait BuilderGenerator
 {
     private ?string $modelName = null;
-    private ?string $table     = null;
+    private ?string $tableName = null;
 
     final public function __get(string $name)
     {
         return match ($name) {
-            'table' => $this->table ?? $this->makeModel()->getTable(),
+            'table' => $this->getTable(),
             'model' => $this->makeModel(),
             'query' => $this->makeModel(instance: false)::query(),
             default => $this->magicGet($name),
         };
+    }
+
+    private function getTable(): string
+    {
+        return is_null($this->tableName) ? $this->tableName = $this->makeModel()->getTable() : $this->tableName;
     }
 
     private function getModel(): string
