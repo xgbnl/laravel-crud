@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Xgbnl\Business\Utils;
 
-use HttpInvalidParamException;
 use Illuminate\Http\JsonResponse;
 use InvalidArgumentException;
 use Xgbnl\Business\Decorates\Factory\DecorateFactory;
@@ -98,7 +97,6 @@ class MagicMethods
      */
     static public function endpoint(mixed $needle, string $domain = null, bool $replace = false): mixed
     {
-        $domain   = $domain ?? env('APP_URL');
         $decorate = DecorateFactory::builderDecorate($needle);
 
         return $replace ? $decorate->removeEndpoint($needle, $domain) : $decorate->endpoint($needle, $domain);

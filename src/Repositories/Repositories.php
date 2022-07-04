@@ -6,9 +6,18 @@ namespace Xgbnl\Business\Repositories;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Xgbnl\Business\Attributes\Business;
+use Xgbnl\Business\Traits\ReflectionParse;
+use Xgbnl\Business\Utils\MagicMethods;
 
+/**
+ * @method mixed endpoint(mixed $needle, string $domain, bool $replace = false) 为图像添加或移除域名
+ */
+#[Business(MagicMethods::class)]
 abstract class Repositories extends AbstractRepositories
 {
+    use ReflectionParse;
+
     // 如果前端分页参数是数组成员，则忽略
     protected array $excepts = [
         'pageNum',
