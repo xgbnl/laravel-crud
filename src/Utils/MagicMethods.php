@@ -92,12 +92,13 @@ class MagicMethods
     /**
      * Remove or add domain to image path.
      * @param mixed $needle
-     * @param string $domain
+     * @param string|null $domain
      * @param bool $replace
      * @return mixed
      */
-    static public function endpoint(mixed $needle, string $domain, bool $replace = false): mixed
+    static public function endpoint(mixed $needle, string $domain = null, bool $replace = false): mixed
     {
+        $domain   = $domain ?? env('APP_URL');
         $decorate = DecorateFactory::builderDecorate($needle);
 
         return $replace ? $decorate->removeEndpoint($needle, $domain) : $decorate->endpoint($needle, $domain);
