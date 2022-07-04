@@ -71,13 +71,11 @@ class MagicMethods
      * @param bool $returnOrigin
      * @return array
      */
-    static public function filterFields(array $origin, mixed $fields,bool $returnOrigin = true): array
+    static public function filterFields(array $origin, mixed $fields, bool $returnOrigin = true): array
     {
         $decorate = DecorateFactory::builderDecorate($fields);
 
-        return $returnOrigin
-            ? $decorate->filter($origin,$fields)
-            : $decorate->arrayFields($origin,$fields);
+        return $returnOrigin ? $decorate->filter($origin, $fields) : $decorate->arrayFields($origin, $fields);
     }
 
     /**
@@ -89,5 +87,19 @@ class MagicMethods
     static public function trigger(int $code, string $message): void
     {
         throw new InvalidArgumentException($message, $code);
+    }
+
+    /**
+     * Remove or add domain to image path.
+     * @param mixed $needle
+     * @param string $domain
+     * @param bool $replace
+     * @return mixed
+     */
+    static public function endpoint(mixed $needle, string $domain, bool $replace = false): mixed
+    {
+        $decorate = DecorateFactory::builderDecorate($needle);
+
+        return $replace ? $decorate->removeEndpoint($needle, $domain) : $decorate->endpoint($needle, $domain);
     }
 }
