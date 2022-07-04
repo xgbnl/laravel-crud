@@ -9,11 +9,11 @@ use Illuminate\Http\JsonResponse;
 use Xgbnl\Business\Paginator\Paginator;
 
 /**
- * @method JsonResponse json(mixed $data = null, int $code = 200)
- * @method Paginator customPaginate(array $list = [], bool $isPaginate = true)
- * @method array filter(array $arrays)
- * @method array filterFields(array $origin, mixed $fields,bool $returnOrigin = true)
- * @method void trigger(int $code, string $message)
+ * @method JsonResponse json(mixed $data = null, int $code = 200) 自定义Json返回
+ * @method Paginator customPaginate(array $list = [], bool $isPaginate = true) 自定义分页
+ * @method array filter(array $arrays) 过滤数组中值为null的键
+ * @method array filterFields(array $origin, mixed $fields,bool $returnOrigin = true) 过滤指定的字段集合，$returnOrigin为true时返回过滤后的数组，反之返回一个Fields集合数组
+ * @method void trigger(int $code, string $message) 触发一个Http异常
  */
 abstract class CrudController extends AbstractController
 {
