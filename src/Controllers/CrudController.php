@@ -13,7 +13,8 @@ use Xgbnl\Business\Paginator\Paginator;
  * @method Paginator customPaginate(array $list = [], bool $isPaginate = true) 自定义分页
  * @method array filter(array $arrays) 过滤数组中值为null的键
  * @method array filterFields(array $origin, mixed $fields,bool $returnOrigin = true) 过滤指定的字段集合，$returnOrigin为true时返回过滤后的数组，反之返回一个Fields集合数组
- * @method void trigger(int $code, string $message) 触发一个Http异常
+ * @method void trigger(int $code, string $message) 触发一个异常
+ * @method mixed endpoint(mixed $needle, string $domain, bool $replace = false) 为图像添加或移除域名
  */
 abstract class CrudController extends AbstractController
 {

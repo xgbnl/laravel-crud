@@ -6,9 +6,10 @@ namespace Xgbnl\Business\Decorates;
 
 use Xgbnl\Business\Attributes\BusinessTag;
 use Xgbnl\Business\Decorates\Contacts\Decorate;
+use Xgbnl\Business\Decorates\Contacts\ImageObjectDecorate;
 
 #[BusinessTag('数组包装器')]
-class ArrayDecorate implements Decorate
+class ArrayDecorate extends AbstractDecorate implements Decorate, ImageObjectDecorate
 {
     public function filter(array $origin, mixed $fields): array
     {
@@ -33,5 +34,15 @@ class ArrayDecorate implements Decorate
         }, $fields);
 
         return $items;
+    }
+
+    public function endpoint(mixed $need, string $domain): mixed
+    {
+        return array_map(fn($path) => $domain . $path, $need);
+    }
+
+    public function removeEndpoint(mixed $need, string $domain): mixed
+    {
+        return array_map(fn($path) => $this->replace($path, $domain), $need);
     }
 }
