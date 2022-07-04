@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Xgbnl\Business\Utils;
 
+use HttpException;
 use Illuminate\Http\JsonResponse;
 use Xgbnl\Business\Paginator\Paginator;
 
@@ -58,7 +59,7 @@ class MagicMethods
      */
     static public function filter(array $origin): array
     {
-        return array_filter($origin,fn($data) => !empty($data));
+        return array_filter($origin, fn($data) => !empty($data));
     }
 
     /**
@@ -67,7 +68,7 @@ class MagicMethods
      * @param array|string $fields
      * @return array
      */
-    final protected function filterFields(array &$origin, array|string $fields): array
+    static public function filterFields(array &$origin, array|string $fields): array
     {
         if (is_string($fields) && isset($origin[$fields])) {
             unset($origin[$fields]);
@@ -82,5 +83,17 @@ class MagicMethods
         }
 
         return $origin;
+    }
+
+    /**
+     * Custom thorw error
+     * @param int $code
+     * @param string $message
+     * @return void
+     * @throws HttpException
+     */
+    static public function trigger(int $code, string $message): void
+    {
+        throw new HttpException($message, $code);
     }
 }
