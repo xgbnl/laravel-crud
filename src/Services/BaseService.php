@@ -90,19 +90,20 @@ abstract class BaseService extends Observable
      */
     final public function destroy(int|array $value, string $by = 'id'): int|bool
     {
-        if (is_array($value)) {
-            $count = 0;
+        return is_array($value) ? $this->batchDeleted($value, $by) : $this->deleted($value, $by);
+    }
 
-            foreach ($this->query->whereIn($by, $value)->get() as $model) {
-                if ($model->delete()) {
-                    $count++;
-                }
+    private function batchDeleted(array $values, string $by): int
+    {
+        $count = 0;
+
+        foreach ($this->query->whereIn($by, $values)->get() as $model) {
+            if ($model->delete()) {
+                $count++;
             }
-
-            return $count;
         }
 
-        return $this->deleted($value, $by);
+        return $count;
     }
 
     private function deleted(int $value, string $by): bool
@@ -142,7 +143,9 @@ abstract class BaseService extends Observable
     }
 
     /**
-     * 获取模型属性
+     * 获取模型批量赋值属性
+     * @param string $property 默认为fillable
+     * @return array
      */
     final public function getModelProperty(string $property = 'fillable'): array
     {
