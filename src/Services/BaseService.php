@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Xgbnl\Business\Services;
 
 use Exception;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use LogicException;
 use ReflectionClass;
 use Throwable;
+use Xgbnl\Business\Attributes\Business;
 use Xgbnl\Business\Traits\BuilderGenerator;
+use Xgbnl\Business\Traits\ReflectionParse;
 use Xgbnl\Business\Utils\Fail;
+use Illuminate\Database\Eloquent\{Model, ModelNotFoundException};
+use Illuminate\Support\Facades\{DB, Log};
 
 abstract class BaseService extends Observable
 {
@@ -31,37 +31,22 @@ abstract class BaseService extends Observable
             if ($by === 'id') {
                 unset($data[$by]);
             }
-
-            try {
-                DB::beginTransaction();
-
-                $this->model = $this->query->updateOrCreate([$by => $byValue], $data);
-
-                DB::commit();
-
-                $this->trigger = 'updated';
-
-                $this->notify();
-
-                return $this->model;
-            } catch (Throwable $e) {
-
-                DB::rollBack();
-
-                $msg = '更新数据错误 [ ' . $e->getMessage() . ' ]';
-                Log::error($msg);
-                Fail::throwFailException(message: $msg, throwable: $e);
-            }
+            return $this->updated([$by => $byValue], $data);
         }
 
+        return $this->created($data);
+    }
+
+    private function created(array $data): Model
+    {
         try {
             DB::beginTransaction();
 
-            $this->model = $this->query->create($data);
+            $this->modelClass = $this->query->create($data);
 
             DB::commit();
 
-            $this->trigger = 'created';
+            $this->trigger = __METHOD__;
         } catch (Throwable $e) {
             DB::rollBack();
 
@@ -74,25 +59,62 @@ abstract class BaseService extends Observable
         return $this->model;
     }
 
+    private function updated(array $attributes, array $data): Model
+    {
+        try {
+            DB::beginTransaction();
+
+            $this->modelClass = $this->query->updateOrCreate($attributes, $data);
+
+            DB::commit();
+
+            $this->trigger = __METHOD__;
+
+            $this->notify();
+
+            return $this->model;
+        } catch (Throwable $e) {
+
+            DB::rollBack();
+
+            $msg = '更新数据错误 [ ' . $e->getMessage() . ' ]';
+            Log::error($msg);
+            Fail::throwFailException(message: $msg, throwable: $e);
+        }
+    }
+
     /**
      * 批量删除模型或删除单个模型
      * 批量删除无法触发观察者
      * @param int|array $value
      * @param string $by
-     * @return bool
+     * @return int|bool
      */
-    final public function destroy(int|array $value, string $by = 'id'): bool
+    final public function destroy(int|array $value, string $by = 'id'): int|bool
     {
         if (is_array($value)) {
-            $this->query->whereIn($by, $value)->delete();
+            $count = 0;
+
+            foreach ($this->query->whereIn($by, $value)->get() as $model) {
+                if ($model->delete()) {
+                    $count++;
+                }
+            }
+
+            return $count;
         }
 
-        $this->model = $this->query->where($by, $value)->first();
+        return $this->deleted($value, $by);
+    }
+
+    private function deleted(int $value, string $by): bool
+    {
+        $this->modelClass = $this->query->where($by, $value)->first();
 
         try {
-            $this->model->delete();
+            $this->modelClass->delete();
 
-            $this->trigger = 'deleted';
+            $this->trigger = __METHOD__;
 
         } catch (LogicException $e) {
 
@@ -100,19 +122,21 @@ abstract class BaseService extends Observable
 
             Log::error($error);
 
-            Fail::throwFailException(message: $error,throwable: $e);
+            Fail::throwFailException(message: $error, throwable: $e);
         } catch (Exception $e) {
 
             $error = class_basename($this) . '::destroy' . '删除数据失败:[ ' . $e->getMessage() . ' ]';
 
             Log::error($error);
 
-            Fail::throwFailException(message: $error,throwable: $e);
+            Fail::throwFailException(message: $error, throwable: $e);
         }
 
         $this->notify();
+
         return true;
     }
+
 
     protected function registerObserver(): void
     {
@@ -126,8 +150,8 @@ abstract class BaseService extends Observable
     {
         $ref = new ReflectionClass($this->model);
 
-       return $ref->hasProperty($property)
-           ? $ref->getProperty($property)->getDefaultValue()
-           : Fail::throwFailException('模型'.$this->modelName.'不存在属性:['.$property.']');
+        return $ref->hasProperty($property)
+            ? $ref->getProperty($property)->getDefaultValue()
+            : Fail::throwFailException('模型' . $this->modelName . '不存在属性:[' . $property . ']');
     }
 }
