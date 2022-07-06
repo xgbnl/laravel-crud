@@ -48,7 +48,7 @@ abstract class BaseService extends Observable
 
             $this->notify();
 
-            return $this->model;
+            return $this->modelClass;
         } catch (Throwable $e) {
 
             DB::rollBack();
@@ -78,7 +78,7 @@ abstract class BaseService extends Observable
         }
 
         $this->notify();
-        return $this->model;
+        return $this->modelClass;
     }
 
     /**
