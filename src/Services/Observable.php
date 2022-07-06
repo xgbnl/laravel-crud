@@ -2,7 +2,6 @@
 
 namespace Xgbnl\Business\Services;
 
-use HttpRuntimeException;
 use Illuminate\Database\Eloquent\Model;
 use Xgbnl\Business\Contacts\Observer;
 use Xgbnl\Business\Utils\Fail;
@@ -13,7 +12,7 @@ abstract class Observable
 
     protected ?Observer $observer = null;
 
-    protected ?string $trigger = null;
+    protected  ?string $trigger = null;
 
     final public function __construct()
     {
@@ -30,7 +29,9 @@ abstract class Observable
     }
 
     /**
-     * @throws HttpRuntimeException
+     * 为服务注册观察者
+     * @param string $observer
+     * @return void
      */
     protected function observer(string $observer): void
     {
@@ -39,5 +40,15 @@ abstract class Observable
         }
 
         $this->observer = app($observer);
+    }
+
+    /**
+     * 设置触发方法
+     * @param string $method
+     * @return void
+     */
+    final protected function triggerMethod(string $method): void
+    {
+        $this->trigger = $method;
     }
 }

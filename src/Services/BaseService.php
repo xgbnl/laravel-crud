@@ -44,7 +44,7 @@ abstract class BaseService extends Observable
 
             DB::commit();
 
-            $this->trigger = __METHOD__;
+            $this->triggerMethod(__METHOD__);
 
             $this->notify();
 
@@ -68,7 +68,7 @@ abstract class BaseService extends Observable
 
             DB::commit();
 
-            $this->trigger = __METHOD__;
+            $this->triggerMethod(__METHOD__);
         } catch (Throwable $e) {
             DB::rollBack();
 
@@ -113,7 +113,7 @@ abstract class BaseService extends Observable
         try {
             $this->modelClass->delete();
 
-            $this->trigger = __METHOD__;
+            $this->triggerMethod(__METHOD__);
 
         } catch (LogicException $e) {
 
