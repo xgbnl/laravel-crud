@@ -136,7 +136,6 @@ abstract class BaseService extends Observable
         return true;
     }
 
-
     protected function registerObserver(): void
     {
         $this->observer = null;
