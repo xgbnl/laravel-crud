@@ -8,9 +8,7 @@ use Exception;
 use LogicException;
 use ReflectionClass;
 use Throwable;
-use Xgbnl\Business\Attributes\Business;
 use Xgbnl\Business\Traits\BuilderGenerator;
-use Xgbnl\Business\Traits\ReflectionParse;
 use Xgbnl\Business\Utils\Fail;
 use Illuminate\Database\Eloquent\{Model, ModelNotFoundException};
 use Illuminate\Support\Facades\{DB, Log};
@@ -37,28 +35,6 @@ abstract class BaseService extends Observable
         return $this->created($data);
     }
 
-    private function created(array $data): Model
-    {
-        try {
-            DB::beginTransaction();
-
-            $this->modelClass = $this->query->create($data);
-
-            DB::commit();
-
-            $this->trigger = __METHOD__;
-        } catch (Throwable $e) {
-            DB::rollBack();
-
-            $msg = '创建数据错误 [ ' . $e->getMessage() . ' ]';
-            Log::error($msg);
-            Fail::throwFailException(message: $msg, throwable: $e);
-        }
-
-        $this->notify();
-        return $this->model;
-    }
-
     private function updated(array $attributes, array $data): Model
     {
         try {
@@ -81,6 +57,28 @@ abstract class BaseService extends Observable
             Log::error($msg);
             Fail::throwFailException(message: $msg, throwable: $e);
         }
+    }
+
+    private function created(array $data): Model
+    {
+        try {
+            DB::beginTransaction();
+
+            $this->modelClass = $this->query->create($data);
+
+            DB::commit();
+
+            $this->trigger = __METHOD__;
+        } catch (Throwable $e) {
+            DB::rollBack();
+
+            $msg = '创建数据错误 [ ' . $e->getMessage() . ' ]';
+            Log::error($msg);
+            Fail::throwFailException(message: $msg, throwable: $e);
+        }
+
+        $this->notify();
+        return $this->model;
     }
 
     /**
