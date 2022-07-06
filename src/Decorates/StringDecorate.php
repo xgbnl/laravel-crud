@@ -27,7 +27,7 @@ class StringDecorate extends ArrayDecorate implements Decorate, ImageObjectDecor
 
     public function endpoint(mixed $need, string $domain): mixed
     {
-        return $domain . $need;
+        return $this->appendStr($domain).$need;
     }
 
     public function removeEndpoint(mixed $need, string $domain): string

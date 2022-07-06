@@ -38,7 +38,7 @@ class ArrayDecorate extends AbstractDecorate implements Decorate, ImageObjectDec
 
     public function endpoint(mixed $need, string $domain): mixed
     {
-        return array_map(fn($path) => $domain . $path, $need);
+        return array_map(fn($path) => $this->appendStr($domain) . $path, $need);
     }
 
     public function removeEndpoint(mixed $need, string $domain): mixed
