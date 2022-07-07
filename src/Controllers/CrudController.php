@@ -61,9 +61,6 @@ abstract class CrudController extends AbstractController
         return $this->json();
     }
 
-    /**
-     * @throws HttpRuntimeException
-     */
     final protected function doDestroy(?int $id = null): JsonResponse
     {
         if (!is_null($id)) {
