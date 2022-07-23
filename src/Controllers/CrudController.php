@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Xgbnl\Business\Controllers;
 
-use HttpRuntimeException;
 use Illuminate\Http\JsonResponse;
 use Xgbnl\Business\Paginator\Paginator;
 

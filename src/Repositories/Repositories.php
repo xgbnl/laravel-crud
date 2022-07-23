@@ -91,6 +91,7 @@ abstract class Repositories extends AbstractRepositories
                 $query = $query->where($column, $value);
             }
         }
+        unset($column,$value);
 
         $query->get()->map(function ($model) {
             $this->models[] = $this->transform($model);
